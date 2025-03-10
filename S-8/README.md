@@ -1,54 +1,88 @@
-# React + TypeScript + Vite
+Getting Started
+This project consists of two main parts:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend: A React application.
+Backend: A Node.js API with MySQL or MongoDB for database management.
+Frontend
+The frontend is built with React and includes several features:
 
-Currently, two official plugins are available:
+A Top Menu for navigation between Home, Map, Calendar, and Charts.
+An interactive Map with location markers.
+A FullCalendar for managing events.
+Chartjs integration for displaying dynamic bar and line charts.
+Backend
+The backend is a Node.js API with CRUD operations connected to either MySQL or MongoDB to manage the data. The API handles:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Storing locations with latitude and longitude (for the Map).
+Managing events (for the Calendar).
+Storing data used in the charts (for Chartjs).
+Prerequisites
+To run this project, you need to have the following software installed:
 
-## Expanding the ESLint configuration
+Node.js (version 16 or higher)
+npm (Node Package Manager)
+MySQL or MongoDB (for the database)
+You will also need the following packages in the project:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+React (for the frontend)
+React-router-dom (for routing)
+Axios (for API calls)
+FullCalendar (for the calendar functionality)
+Chart.js (for rendering the charts)
+Mapbox (for displaying the map)
+Installation
+1. Clone the repository:
+bash
+Copiar
+Editar
+git clone https://github.com/yourusername/yourrepository.git
+cd yourrepository
+2. Install frontend dependencies:
+In the root folder of the project, navigate to the client folder (or wherever your React app is located), and run:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+bash
+Copiar
+Editar
+cd client
+npm install
+This will install all the necessary frontend dependencies for React, React Router, FullCalendar, Chart.js, etc.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+3. Install backend dependencies:
+Now, navigate to the backend folder (or wherever your Node.js API is located) and install the backend dependencies:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+bash
+Copiar
+Editar
+cd server
+npm install
+This will install the necessary dependencies for the backend, including Express, MySQL/MongoDB, and other packages for API functionality.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Running the Project
+1. Start the backend server:
+In the server folder, run the following command to start your Node.js API:
+
+bash
+Copiar
+Editar
+npm start
+By default, the backend will be available at http://localhost:5000. You can configure the port if needed by modifying the server.js file.
+
+2. Start the frontend:
+In the client folder, run the following command to start your React app:
+
+bash
+Copiar
+Editar
+npm start
+This will launch the React development server, and your app will be available at http://localhost:3000.
+
+Backend API Usage
+The backend API supports CRUD operations for the Map, Calendar, and Charts data.
+
+Endpoints:
+POST /api/locations: Adds a new location with latitude and longitude.
+GET /api/locations: Retrieves all locations stored in the database.
+POST /api/events: Adds a new calendar event.
+GET /api/events: Retrieves all calendar events.
+POST /api/charts: Adds new data for the charts.
+GET /api/charts: Retrieves chart data.
