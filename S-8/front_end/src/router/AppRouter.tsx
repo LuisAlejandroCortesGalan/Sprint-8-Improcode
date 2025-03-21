@@ -6,7 +6,6 @@ import Calendar from "../components/Calendar"
 import Charts from "../components/Charts"
 
 
-
 const AppRouter = () => {
     
     return (

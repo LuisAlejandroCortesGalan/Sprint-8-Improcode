@@ -48,7 +48,7 @@ const Nav = () => {
             <Link to="/maps" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>Map</Link>
           </li>
           <li>
-            <Link to="/calendar" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>FullCalendar</Link>
+            <Link to="/calendar" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>Calendar</Link>
           </li>
           <li>
             <Link to="/charts" className="hover:text-gray-200 transition" onClick={() => setIsOpen(false)}>Charts</Link>

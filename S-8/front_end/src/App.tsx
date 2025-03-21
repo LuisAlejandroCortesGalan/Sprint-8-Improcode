@@ -1,11 +1,12 @@
+import { MapProvider } from "./mapContext/MapContext"
 import AppRouter from "./router/AppRouter"
 
 function App() {
 
   return (
-    <>
-      <AppRouter />
-    </>
+    <MapProvider>
+        <AppRouter />
+    </MapProvider>
   )
 }
 
