@@ -1,25 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { MapEvent } from "../types/mapEventTypes";
+import { MapContextData } from "../types/mapContextTypes";
 
-interface MapEvent {
-  _id: string;
-  title: string;
-  subtitle: string;
-  start: string;
-  end: string;
-  description: string;
-  lat: number;
-  lng: number;
-}
-
-interface MapContextData {
-  mapsData: MapEvent[];
-  loading: boolean;
-  error: string | null;
-  fetchMapEvents: () => Promise<void>;
-  createMapEvent: (eventData: Omit<MapEvent, "_id">) => Promise<void>;
-  deleteMapEvent: (id: string) => Promise<void>;
-  updateMapEvent: (id: string, eventData: MapEvent) => Promise<void>;
-}
 
 const MapContext = createContext<MapContextData | undefined>(undefined);
 
@@ -61,8 +43,6 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({
         body: JSON.stringify(eventData),
       });
 
-      console.log("aqui veo si  esta editando y que cosa", eventData);
-
       if (!response.ok) {
         throw new Error(`Error creating map: ${response.statusText}`);
       }
@@ -93,23 +73,28 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const deleteMapEvent = async (id: string) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/maps/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
+  const deleteMapEvent = async (id: string, title: string) => {
+    const confirmation = confirm(`Are you sure to delete the event ${title}?`)
 
-      if (!response.ok) {
-        throw new Error(`Error deleting map: ${response.statusText}`);
+    if (confirmation) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/maps/${id}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`Error deleting map: ${response.statusText}`);
+        }
+  
+        await fetchMapEvents();
+      } catch (error) {
+        console.error("Error deleting map:", error);
+        setError("Failed to delete event");
       }
-
-      await fetchMapEvents();
-    } catch (error) {
-      console.error("Error deleting map:", error);
-      setError("Failed to delete event");
+    };
     }
-  };
+
 
   useEffect(() => {
     fetchMapEvents();

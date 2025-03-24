@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+@media (max-width: 768px) {
+    .fc-daygrid-day {
+      min-height: 60px !important;
+    }
+  }

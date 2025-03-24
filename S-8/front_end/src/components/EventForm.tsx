@@ -1,39 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useMapContext } from "../mapContext/MapContext";
-
-export interface Position {
-  lng: number;
-  lat: number;
-}
-
-interface EventFormData {
-  _id: string;
-  title: string;
-  subtitle: string;
-  start: string;
-  end: string;
-  description: string;
-  lat: number;
-  lng: number;
-}
-
-interface FormErrors {
-  title?: string;
-  start?: string;
-  end?: string;
-  lat?: string;
-  lng?: string;
-  subtitle?: string;
-  description?: string;
-}
-
-interface EventFormProps {
-  coordinates?: Position;
-  handleClick: (id: string) => EventFormData | undefined;
-  isEditing: boolean;
-  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
-  eventId?: string;
-}
+import {
+  EventFormData,
+  EventFormProps,
+  FormErrors,
+} from "../types/eventFormTypes";
 
 const EventForm = ({
   coordinates,
@@ -41,13 +12,15 @@ const EventForm = ({
   isEditing,
   setIsEditing,
   eventId,
+  defaultDate,
+  onSuccess,
 }: EventFormProps) => {
   const { createMapEvent, updateMapEvent } = useMapContext();
   const [formData, setFormData] = useState<EventFormData>({
     _id: "",
     title: "",
     subtitle: "",
-    start: "",
+    start: isEditing ? "" : defaultDate || "", // Usa defaultDate para nuevos eventos
     end: "",
     description: "",
     lat: coordinates?.lat ?? 0,
@@ -75,26 +48,32 @@ const EventForm = ({
     if (!formData.subtitle) newErrors.subtitle = "Subtitle is required";
     if (!formData.start) newErrors.start = "Start date is required";
     if (!formData.end) newErrors.end = "End date is required";
-    if (!formData.description) newErrors.description = "Description is required";
+    if (!formData.description)
+      newErrors.description = "Description is required";
 
     if (formData.start) {
       const startDate = new Date(formData.start);
-      if (startDate < today) newErrors.start = "Start date must be today or later";
+      if (startDate < today)
+        newErrors.start = "Start date must be today or later";
     }
 
     if (formData.end) {
       const endDate = new Date(formData.end);
-      if (endDate > maxDate) newErrors.end = "End date must be within one year from today";
+      if (endDate > maxDate)
+        newErrors.end = "End date must be within one year from today";
     }
 
     if (formData.start && formData.end) {
       const startDate = new Date(formData.start);
       const endDate = new Date(formData.end);
-      if (startDate >= endDate) newErrors.end = "End date must be after start date";
+      if (startDate >= endDate)
+        newErrors.end = "End date must be after start date";
     }
 
-    if (formData.lat < -90 || formData.lat > 90) newErrors.lat = "Latitude must be between -90 and 90";
-    if (formData.lng < -180 || formData.lng > 180) newErrors.lng = "Longitude must be between -180 and 180";
+    if (formData.lat < -90 || formData.lat > 90)
+      newErrors.lat = "Latitude must be between -90 and 90";
+    if (formData.lng < -180 || formData.lng > 180)
+      newErrors.lng = "Longitude must be between -180 and 180";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -105,6 +84,7 @@ const EventForm = ({
       try {
         await createMapEvent(formData);
         handleReset();
+        if (onSuccess) onSuccess();
       } catch (error) {
         console.error("Error creating event:", error);
       }
@@ -118,6 +98,7 @@ const EventForm = ({
       try {
         await updateMapEvent(formData._id, formData);
         handleReset();
+        if (onSuccess) onSuccess();
       } catch (error) {
         console.error("Error updating event:", error);
       }
@@ -132,7 +113,7 @@ const EventForm = ({
       _id: "",
       title: "",
       subtitle: "",
-      start: "",
+      start: defaultDate || "", // Restablece con defaultDate si está disponible
       end: "",
       description: "",
       lat: coordinates?.lat ?? 0,
@@ -146,9 +127,9 @@ const EventForm = ({
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     handleReset();
+    if (onSuccess) onSuccess();
   };
 
-  // First useEffect to handle loading event data when entering edit mode
   useEffect(() => {
     if (eventId && isEditing && !initialLoadDone) {
       const eventData = handleClick(eventId);
@@ -167,10 +148,8 @@ const EventForm = ({
         setIsEditing(false);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId, isEditing, handleClick, initialLoadDone]);
 
-  // Second useEffect to handle map coordinate updates
   useEffect(() => {
     if (coordinates) {
       console.log("Coordinates updated:", coordinates);
@@ -187,8 +166,8 @@ const EventForm = ({
   return (
     <div className="flex flex-col justify-center py-10">
       <div className="sm:max-w-xl sm:mx-auto">
-      <div className="bg-white md:mx-0 rounded-3xl p-4.5 shadow-lg shadow-purple-400">          
-      <div className="max-w-md mx-auto">
+        <div className="bg-white md:mx-0 rounded-3xl p-4.5 shadow-lg shadow-purple-400">
+          <div className="max-w-md mx-auto">
             <div className="divide-y divide-gray-200">
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className="text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
@@ -202,7 +181,9 @@ const EventForm = ({
                       className="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
                       placeholder="Event title"
                     />
-                    {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
+                    {errors.title && (
+                      <p className="text-red-500 text-sm">{errors.title}</p>
+                    )}
                   </div>
                   <div className="flex flex-col">
                     <label className="leading-loose">Event Subtitle</label>
@@ -225,7 +206,9 @@ const EventForm = ({
                         onChange={handleChange}
                         className="pr-2 pl-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
                       />
-                      {errors.start && <p className="text-red-500 text-sm">{errors.start}</p>}
+                      {errors.start && (
+                        <p className="text-red-500 text-sm">{errors.start}</p>
+                      )}
                     </div>
                     <div className="flex flex-col">
                       <label className="leading-loose">End</label>
@@ -236,7 +219,9 @@ const EventForm = ({
                         onChange={handleChange}
                         className="pr-2 pl-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
                       />
-                      {errors.end && <p className="text-red-500 text-sm">{errors.end}</p>}
+                      {errors.end && (
+                        <p className="text-red-500 text-sm">{errors.end}</p>
+                      )}
                     </div>
                   </div>
                   <div className="flex flex-col">
@@ -250,7 +235,9 @@ const EventForm = ({
                       placeholder="Optional"
                     />
                     {errors.description && (
-                      <p className="text-red-500 text-sm">{errors.description}</p>
+                      <p className="text-red-500 text-sm">
+                        {errors.description}
+                      </p>
                     )}
                   </div>
                   <div className="flex flex-col">
@@ -259,11 +246,23 @@ const EventForm = ({
                       type="text"
                       name="location"
                       value={`${formData.lat}, ${formData.lng}`}
+                      onChange={(e) => {
+                        const [newLat, newLng] = e.target.value
+                          .split(",")
+                          .map((val) => val.trim());
+                        setFormData({
+                          ...formData,
+                          lat: newLat ? parseFloat(newLat) : formData.lat,
+                          lng: newLng ? parseFloat(newLng) : formData.lng,
+                        });
+                      }}
                       className="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
-                      disabled
+                      placeholder="Enter lat, lng (e.g., 40.7128, -74.0060)"
                     />
                     {(errors.lat || errors.lng) && (
-                      <p className="text-red-500 text-sm">{errors.lat || errors.lng}</p>
+                      <p className="text-red-500 text-sm">
+                        {errors.lat || errors.lng}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -280,7 +279,7 @@ const EventForm = ({
                       <button
                         type="button"
                         onClick={handleUpdate}
-                        className="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none cursor-pointer"
+                        className="bg-purple-600 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none cursor-pointer"
                       >
                         Update
                       </button>
@@ -296,7 +295,7 @@ const EventForm = ({
                     <button
                       type="button"
                       onClick={handleCreate}
-                      className="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none cursor-pointer"
+                      className="bg-purple-600 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none cursor-pointer"
                     >
                       Create
                     </button>

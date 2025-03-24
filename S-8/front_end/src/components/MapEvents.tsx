@@ -1,19 +1,6 @@
 import { useMapContext } from "../mapContext/MapContext";
+import { MapEvent, MapsProps } from "../types/mapEventTypes";
 
-interface MapEvent {
-  _id: string;
-  title: string;
-  subtitle: string;
-  start: string;
-  end: string;
-  description: string;
-  lat: number;
-  lng: number;
-}
-
-export interface MapsProps {
-  handleClick: (id: string) => void;
-}
 
 export const MapEvents = ({handleClick}: MapsProps) => {
   const { mapsData, loading, error, deleteMapEvent } = useMapContext();
@@ -21,7 +8,7 @@ export const MapEvents = ({handleClick}: MapsProps) => {
 
   return (
     <div className="container mx-2 pr-4 pb-4">
-      <h1 className="text-2xl font-bold mb-4 pl-4">Saved Events</h1>
+      <h1 className="text-4xl font-bold mb-4 pl-4 text-purple-600">Saved Events</h1>
 
       {loading && <p className="text-gray-500 pl-4">Loading events...</p>}
       {error && <p className="text-red-500">{error}</p>}
@@ -52,20 +39,20 @@ export const MapEvents = ({handleClick}: MapsProps) => {
                 ✏️
               </button>
 
-              <h2 className="text-xl font-semibold text-gray-800">{event.title}</h2>
-              <h3 className="text-md text-gray-600">{event.subtitle}</h3>
+              <h2 className="text-xl font-semibold text-purple-900">Event Name: {event.title}</h2>
+              <h3 className="text-md text-purple-600">Event Subtitle: {event.subtitle}</h3>
               <div className="mt-2">
-                <p className="text-sm text-gray-700">
-                  <span className="font-medium">Start:</span> {event.start}
+                <p className="text-sm text-purple-950">
+                  <span className="font-medium">Start:</span> {event.start.split("T")[0]}
                 </p>
-                <p className="text-sm text-gray-700">
-                  <span className="font-medium">End:</span> {event.end}
+                <p className="text-sm text-purple-950">
+                  <span className="font-medium">End:</span> {event.end.split("T")[0]}
                 </p>
-                <p className="text-sm text-gray-700 mt-1">
+                <p className="text-sm text-purple-950 mt-1">
                   <span className="font-medium">Description:</span> {event.description}
                 </p>
-                <p className="text-sm text-gray-700 mt-1">
-                  <span className="font-medium">Location:</span> {event.lat}, {event.lng}
+                <p className="text-sm text-purple-950 mt-1">
+                  <span className="font-medium">Location:</span> {event.lat} , {event.lng}
                 </p>
               </div>
             </div>

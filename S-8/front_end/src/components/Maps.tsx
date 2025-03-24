@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import EventForm, { Position } from "./EventForm";
+import EventForm from "./EventForm";
 import { MapEvents } from "./MapEvents";
 import { useMapContext } from "../mapContext/MapContext";
+import { Position } from "../types/eventFormTypes";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX;
 
@@ -14,7 +15,7 @@ const Maps = () => {
   const { mapsData } = useMapContext();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [selectedEventId, setSelectedEventId] = useState<string | undefined>();
-  const markersRef = useRef<mapboxgl.Marker[]>([]); // Para almacenar los marcadores de mapsData
+  const markersRef = useRef<mapboxgl.Marker[]>([]);
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -28,58 +29,67 @@ const Maps = () => {
 
     map.addControl(new mapboxgl.NavigationControl());
 
-    // Añadir marcadores para cada evento en mapsData
     map.on("load", () => {
-      // Limpiar marcadores previos si existen
+      // Limpiar los marcadores existentes
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
 
-      // Mapear los eventos de mapsData
+      // Añadir los marcadores para cada evento en mapsData
       mapsData.forEach((event) => {
         if (event.lat !== undefined && event.lng !== undefined) {
-          const marker = new mapboxgl.Marker({ color: "#00FF00" }) // Verde en lugar de rojo
+          const marker = new mapboxgl.Marker({ color: "#00FF00" })
             .setLngLat([event.lng, event.lat])
             .setPopup(
               new mapboxgl.Popup().setHTML(`
-                <h3>${event.title}</h3>
-                ${event.subtitle ? `<p>${event.subtitle}</p>` : ""}
-                ${event.description ? `<p>${event.description}</p>` : ""}
+                <h3 class="text-purple-950 text-lg">Title: <span class="text-sm">${
+                  event.title
+                }<span/></h3> 
+                ${
+                  event.subtitle
+                    ? `<p class="text-purple-950 text-lg">Subtitle: <span class="text-sm">${event.subtitle}<span/></p>`
+                    : ""
+                }
+                ${
+                  event.description
+                    ? `<p class="text-purple-950 text-lg">Description: <span class="text-sm">${event.description}<span/></p>`
+                    : ""
+                }
               `)
             )
             .addTo(map);
           markersRef.current.push(marker);
         }
       });
-
-      // Manejar clics en el mapa para crear nuevos eventos
-      map.on("click", (e) => {
-        const { lng, lat } = e.lngLat;
-        const newPosition: Position = { lng, lat };
-        setClickPosition(newPosition);
-
-        if (markerRef.current) {
-          markerRef.current.remove();
-        }
-        markerRef.current = new mapboxgl.Marker({ color: "#0000FF" }) // Azul para nuevos clics
-          .setLngLat([lng, lat])
-          .addTo(map);
-        console.log("Posición clicada:", newPosition);
-      });
     });
 
-    // Limpiar al desmontar el componente
+    // Configurar el evento de click por separado
+    map.on("click", (e) => {
+      console.log("Mapa clickeado", e);
+      const { lng, lat } = e.lngLat;
+      const newPosition: Position = { lng, lat };
+      setClickPosition(newPosition);
+
+      if (markerRef.current) {
+        markerRef.current.remove();
+      }
+      markerRef.current = new mapboxgl.Marker({ color: "#0000FF" })
+        .setLngLat([lng, lat])
+        .addTo(map);
+      console.log("Posición clicada:", newPosition);
+    });
+
     return () => {
       if (markerRef.current) markerRef.current.remove();
       markersRef.current.forEach((marker) => marker.remove());
       map.remove();
     };
-  }, [mapsData]); // Dependencia en mapsData para actualizar marcadores cuando cambie
+  }, [mapsData]);
 
   const handleClick = (id: string) => {
     const eventData = mapsData.find((data) => data._id === id);
     console.log("Event data found in Maps:", eventData);
-    setSelectedEventId(id); 
-    setIsEditing(true); 
+    setSelectedEventId(id);
+    setIsEditing(true);
     return eventData;
   };
 
@@ -89,8 +99,10 @@ const Maps = () => {
         <div className="w-full md:w-2/3 mb-5 md:mb-0">
           <h2 className="text-center text-4xl pb-4">
             Select the map and{" "}
-            <span className="text-5xl text-purple-700">{isEditing ? "edit" : "create"}</span> an
-            Event!
+            <span className="text-5xl text-purple-700">
+              {isEditing ? "edit" : "create"}
+            </span>{" "}
+            an Event!
           </h2>
           <div
             ref={mapContainerRef}

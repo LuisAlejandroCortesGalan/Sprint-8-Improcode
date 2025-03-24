@@ -14,7 +14,6 @@ import {
 import { Bar, Line } from "react-chartjs-2";
 import { useMapContext } from "../mapContext/MapContext";
 
-// Register ALL required Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -29,7 +28,6 @@ ChartJS.register(
 const Charts: React.FC = () => {
   const { mapsData } = useMapContext();
 
-  // Calculate events by month
   const monthlyData = React.useMemo(() => {
     const counts: Record<string, number> = {};
     
@@ -39,7 +37,6 @@ const Charts: React.FC = () => {
       counts[monthKey] = (counts[monthKey] || 0) + 1;
     });
     
-    // Sort the months chronologically
     const sortedMonths = Object.keys(counts).sort();
     
     return {
@@ -48,7 +45,6 @@ const Charts: React.FC = () => {
     };
   }, [mapsData]);
 
-  // Calculate cumulative events
   const cumulativeData = React.useMemo(() => {
     if (!mapsData.length) return { labels: [], values: [] };
     
@@ -64,7 +60,6 @@ const Charts: React.FC = () => {
       const dateStr = new Date(event.start).toISOString().split('T')[0];
       cumulative += 1;
       
-      // If the date is the same as the last one, update the last count
       if (labels.length > 0 && labels[labels.length - 1] === dateStr) {
         values[values.length - 1] = cumulative;
       } else {
@@ -76,7 +71,6 @@ const Charts: React.FC = () => {
     return { labels, values };
   }, [mapsData]);
 
-  // Common chart options
   const commonOptions: ChartOptions<'bar' | 'line'> = {
     responsive: true,
     maintainAspectRatio: true,
@@ -93,19 +87,18 @@ const Charts: React.FC = () => {
     },
   };
 
-  // If no data, show a message
   if (!mapsData || mapsData.length === 0) {
     return <p className="text-center p-4">No hay eventos todavía.</p>;
   }
 
   return (
-    <div className="p-4">
+    <div className="p-6 flex flex-col justify-center items-center">
       <h2 className="text-xl font-bold text-center mb-4">Gráficos de Eventos</h2>
       
       <div className="mb-8">
         <h3 className="text-lg font-semibold text-center mb-2">Eventos por Mes</h3>
         {monthlyData.labels.length > 0 ? (
-          <div style={{ height: '300px' }}>
+          <div style={{ height: '300px', width: '300px'}} className="sm:w-2xs">
             <Bar
               data={{
                 labels: monthlyData.labels,
@@ -130,7 +123,7 @@ const Charts: React.FC = () => {
       <div>
         <h3 className="text-lg font-semibold text-center mb-2">Eventos Acumulados</h3>
         {cumulativeData.labels.length > 0 ? (
-          <div style={{ height: '300px' }}>
+          <div style={{ height: '300px', width: '300px' }} className="sm:w-2xs">
             <Line
               data={{
                 labels: cumulativeData.labels,
