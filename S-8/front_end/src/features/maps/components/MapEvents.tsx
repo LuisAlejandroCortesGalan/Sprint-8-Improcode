@@ -1,5 +1,5 @@
-import { useMapContext } from "../mapContext/MapContext";
-import { MapEvent, MapsProps } from "../types/mapEventTypes";
+import { useMapContext } from "../../events/context/MapContext";
+import { MapEvent, MapsProps } from "../../events/types/mapEventTypes";
 
 
 export const MapEvents = ({handleClick}: MapsProps) => {
@@ -25,7 +25,7 @@ export const MapEvents = ({handleClick}: MapsProps) => {
               className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg shadow-purple-400 transition-shadow relative"
             >
               <button
-                onClick={() => deleteMapEvent(event._id)}
+                onClick={() => deleteMapEvent(event._id, event.title)}
                 className="absolute top-2 right-2 text-red-500 hover:text-red-700 focus:outline-none cursor-pointer"
                 aria-label="Delete event"
               >

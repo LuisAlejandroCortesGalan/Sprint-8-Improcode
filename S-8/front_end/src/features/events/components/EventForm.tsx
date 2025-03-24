@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useMapContext } from "../mapContext/MapContext";
+import { useMapContext } from "../context/MapContext";
 import {
   EventFormData,
   EventFormProps,
@@ -20,7 +20,7 @@ const EventForm = ({
     _id: "",
     title: "",
     subtitle: "",
-    start: isEditing ? "" : defaultDate || "", // Usa defaultDate para nuevos eventos
+    start: isEditing ? "" : defaultDate || "", 
     end: "",
     description: "",
     lat: coordinates?.lat ?? 0,
@@ -113,7 +113,7 @@ const EventForm = ({
       _id: "",
       title: "",
       subtitle: "",
-      start: defaultDate || "", // Restablece con defaultDate si está disponible
+      start: defaultDate || "",
       end: "",
       description: "",
       lat: coordinates?.lat ?? 0,

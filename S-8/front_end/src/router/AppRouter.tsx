@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import Nav from "../components/Nav"
-import Home from "../components/Home"
-import Maps from "../components/Maps"
-import Calendar from "../components/Calendar"
-import Charts from "../components/Charts"
+import Nav from "../ui/Nav"
+import Home from "../ui/Home"
+import Maps from "../features/maps/components/Maps"
+import Calendar from "../features/calendars/components/Calendar"
+import Charts from "../features/charts/components/Charts"
 
 
 const AppRouter = () => {

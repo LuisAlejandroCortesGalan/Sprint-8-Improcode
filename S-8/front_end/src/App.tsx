@@ -1,4 +1,4 @@
-import { MapProvider } from "./mapContext/MapContext"
+import { MapProvider } from "../src/features/events/context/MapContext"
 import AppRouter from "./router/AppRouter"
 
 function App() {

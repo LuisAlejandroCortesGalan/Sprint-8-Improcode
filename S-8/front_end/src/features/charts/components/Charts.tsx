@@ -12,7 +12,7 @@ import {
   ChartOptions,
 } from "chart.js";
 import { Bar, Line } from "react-chartjs-2";
-import { useMapContext } from "../mapContext/MapContext";
+import { useMapContext } from "../../events/context/MapContext";
 
 ChartJS.register(
   CategoryScale,

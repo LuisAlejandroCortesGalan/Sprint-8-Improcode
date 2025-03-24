@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import EventForm from "./EventForm";
-import { MapEvents } from "./MapEvents";
-import { useMapContext } from "../mapContext/MapContext";
-import { Position } from "../types/eventFormTypes";
+import EventForm from "../../events/components/EventForm";
+import { MapEvents } from "../../maps/components/MapEvents";
+import { useMapContext } from "../../events/context/MapContext";
+import { Position } from "../../events/types/eventFormTypes";
+import { CalendarEvent } from "../../events/types/calendarTypes";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX;
 
-const Maps = () => {
+const Maps: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const markerRef = useRef<mapboxgl.Marker | null>(null);
   const [clickPosition, setClickPosition] = useState<Position | undefined>();
@@ -30,12 +31,12 @@ const Maps = () => {
     map.addControl(new mapboxgl.NavigationControl());
 
     map.on("load", () => {
-      // Limpiar los marcadores existentes
+      // Clean existing makers
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
 
-      // Añadir los marcadores para cada evento en mapsData
-      mapsData.forEach((event) => {
+      // ADD markers for every event 
+      mapsData.forEach((event: CalendarEvent) => {
         if (event.lat !== undefined && event.lng !== undefined) {
           const marker = new mapboxgl.Marker({ color: "#00FF00" })
             .setLngLat([event.lng, event.lat])
@@ -62,7 +63,7 @@ const Maps = () => {
       });
     });
 
-    // Configurar el evento de click por separado
+    //config te event one by one
     map.on("click", (e) => {
       console.log("Mapa clickeado", e);
       const { lng, lat } = e.lngLat;
@@ -86,7 +87,7 @@ const Maps = () => {
   }, [mapsData]);
 
   const handleClick = (id: string) => {
-    const eventData = mapsData.find((data) => data._id === id);
+    const eventData = mapsData.find((data: CalendarEvent) => data._id === id);
     console.log("Event data found in Maps:", eventData);
     setSelectedEventId(id);
     setIsEditing(true);
