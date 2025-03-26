@@ -4,6 +4,7 @@ import { MapContextData } from "../types/mapContextTypes";
 
 
 const MapContext = createContext<MapContextData | undefined>(undefined);
+const API_URL = import.meta.env.VITE_URL ;
 
 export const MapProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -15,7 +16,7 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({
   const fetchMapEvents = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/maps", {
+      const response = await fetch(API_URL, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -37,7 +38,7 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const createMapEvent = async (eventData: Omit<MapEvent, "_id">) => {
     try {
-      const response = await fetch("http://localhost:5000/api/maps", {
+      const response = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(eventData),
@@ -56,7 +57,7 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const updateMapEvent = async (id: string, formData: MapEvent) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/maps/${id}`, {
+      const response = await fetch(`${API_URL}/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -78,7 +79,7 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({
 
     if (confirmation) {
       try {
-        const response = await fetch(`http://localhost:5000/api/maps/${id}`, {
+        const response = await fetch(`${API_URL}/${id}`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
         });

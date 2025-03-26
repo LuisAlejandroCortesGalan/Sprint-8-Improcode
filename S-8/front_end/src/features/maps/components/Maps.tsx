@@ -63,7 +63,7 @@ const Maps: React.FC = () => {
       });
     });
 
-    //config te event one by one
+    //config the event one by one
     map.on("click", (e) => {
       console.log("Mapa clickeado", e);
       const { lng, lat } = e.lngLat;

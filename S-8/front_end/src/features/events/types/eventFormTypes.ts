@@ -34,5 +34,20 @@ export interface EventFormProps {
     eventId?: string;
     onSuccess?: () => void;
     defaultDate?: string | undefined
-    createMapEvent?:  (eventData: Omit<MapEvent, "_id">) => Promise<void>
+    createMapEvent?: (eventData: Omit<MapEvent, "_id">) => Promise<void>
+}
+
+
+export interface UseEventFormHandlersProps {
+    coordinates?: { lat: number; lng: number };
+    handleClick: (eventId: string) => EventFormData | undefined;
+    isEditing: boolean;
+    setIsEditing: (value: boolean) => void;
+    eventId?: string;
+    defaultDate?: string;
+    onSuccess?: () => void;
+    createMapEvent: (data: EventFormData) => Promise<void>;
+    updateMapEvent: (id: string, data: EventFormData) => Promise<void>;
+    validate: () => boolean;
+    setErrors: (errors: Partial<Record<string, string>>) => void;
 }
