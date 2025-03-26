@@ -1,54 +1,138 @@
-# React + TypeScript + Vite
+# Sprint 8 - Improcode
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to **Sprint 8 - Improcode!** 🎉
 
-Currently, two official plugins are available:
+This is a **fullstack app** to save events on a map, view them in a calendar, and analyze them with charts. It’s designed for developers to test, improve, and contribute.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌍 Live Demo
 
-## Expanding the ESLint configuration
+- **Frontend (Vercel):** [Sprint 8 - Improcode](https://sprint-8-improcode.vercel.app/)
+- **Backend (Render):** Deployed and running on Render.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🚀 What it does
+
+- **Map:** Save events on a map using **Mapbox**.
+- **Calendar:** Display events in a calendar with **FullCalendar**.
+- **Charts:** View event data through **Charts.js**.
+- **Fullstack:** Built with **React + TypeScript** (frontend) and **Node.js + Express** (backend).
+
+---
+
+## 🛠️ Tools Used
+
+### **Frontend**
+- **React with TypeScript**
+- **Tailwind CSS** (for styling)
+- **Mapbox** (for map integration)
+- **FullCalendar** (for event scheduling)
+- **Charts.js** (for data visualization)
+- **Installed via npm**
+
+### **Backend**
+- **Node.js + Express**
+- **TypeScript**
+- **Mongoose** (to connect to MongoDB)
+- **Nodemon** (for development mode)
+- **CORS** (to manage API requests)
+- **Dotenv** (to handle secret variables)
+
+---
+
+## 🏗️ How to Install and Run
+
+### **What You Need First**
+- **Node.js** (version 18 or higher recommended)
+- **Git** (for version control)
+- **MongoDB** (Atlas or local instance)
+- **Terminal or Command Prompt**
+
+### **Clone the Project**
+```sh
+git clone https://github.com/LuisAlejandroCortesGalan/Sprint-8-Improcode.git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📡 Backend Setup
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+1. Navigate to the backend folder:
+   ```sh
+   cd Sprint-8-Improcode/S-8/backend
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Create a `.env` file in the backend folder and add:
+   ```sh
+   PORT=5000
+   MONGO_URI=<your-mongodb-connection-string>
+   ```
+   Replace `<your-mongodb-connection-string>` with your **MongoDB URI**.
+
+4. Start the backend in development mode:
+   ```sh
+   npm run dev
+   ```
+
+### **CORS Notice**
+For development, CORS is set to allow all origins (`*`). This is fine for testing but should be restricted in production.
+
+> **Backend is deployed on Render** ✅
+
+---
+
+## 🎨 Frontend Setup
+
+1. Navigate to the frontend folder:
+   ```sh
+   cd Sprint-8-Improcode/S-8/front_end
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Start the development server:
+   ```sh
+   npm run dev
+   ```
+4. Open the app in your browser:
+   [http://localhost:5173](http://localhost:5173) (or the port displayed in the terminal).
+
+> **Frontend is deployed on Vercel** ✅
+
+---
+
+## 🎯 Why this Project?
+This app is built for developers who want to **test, experiment, and contribute**. Feel free to **check the code, suggest improvements, or report issues**.
+
+---
+
+## 🤝 How to Contribute
+
+1. **Fork the repository.**
+2. **Create a new branch:**
+   ```sh
+   git checkout -b feature/new-thing
+   ```
+3. **Make your changes and commit:**
+   ```sh
+   git commit -m "Added new feature"
+   ```
+4. **Push your branch:**
+   ```sh
+   git push origin feature/new-thing
+   ```
+5. **Open a Pull Request.**
+
+---
+
+## ⚠️ Troubleshooting
+If anything goes wrong or you have questions, **open an issue** in the repository.
+
+---
+
+### Thanks for trying **Sprint 8 - Improcode!** 🚀
+
